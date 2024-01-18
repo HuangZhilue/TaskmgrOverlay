@@ -100,6 +100,7 @@ public static class WindowHandleTool
                 {
                     RECT rect = new();
                     GetWindowRect(chidWindow, out rect);
+                    // 之所以用列表来存储，是因为像在CPU窗口中，用“逻辑处理器”来显示不同核心的曲线
                     CvChartWindowList.Add(Tuple.Create(chidWindow, rect));
                     break;
                 }

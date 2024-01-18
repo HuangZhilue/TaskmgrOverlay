@@ -2,11 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using OverlayLibrary;
 using System.Drawing;
-using System.Windows;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Color = System.Drawing.Color;
 //using OpenCvSharp;
 //using OpenCvSharp.Extensions;
@@ -166,5 +166,9 @@ public partial class MainViewModel : ObservableObject
 
     [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
     [return: MarshalAs(UnmanagedType.Bool)]
+#pragma warning disable CA1401 // P/Invokes 应该是不可见的
+#pragma warning disable SYSLIB1054 // 使用 “LibraryImportAttribute” 而不是 “DllImportAttribute” 在编译时生成 P/Invoke 封送代码
     public static extern bool DeleteObject([In] IntPtr hObject);
+#pragma warning restore SYSLIB1054 // 使用 “LibraryImportAttribute” 而不是 “DllImportAttribute” 在编译时生成 P/Invoke 封送代码
+#pragma warning restore CA1401 // P/Invokes 应该是不可见的
 }

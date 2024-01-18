@@ -6,5 +6,5 @@ public class AppConfig
 
     public string AppPropertiesFileName { get; set; }
 
-    public string GithubLink { get; set; } = "https://github.com/HuangZhilue";
+    public string GithubLink { get; set; } = "https://github.com/HuangZhilue/TaskmgrOverlay";
 }

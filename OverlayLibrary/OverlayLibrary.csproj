@@ -4,8 +4,8 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <AssemblyVersion>1.0.21.0942</AssemblyVersion>
-    <FileVersion>1.0.21.0942</FileVersion>
+    <AssemblyVersion>1.0.39.0245</AssemblyVersion>
+    <FileVersion>1.0.39.0245</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

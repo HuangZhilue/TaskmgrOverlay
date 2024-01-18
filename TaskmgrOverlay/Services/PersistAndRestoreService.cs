@@ -6,25 +6,18 @@ using TaskmgrOverlay.Models;
 
 namespace TaskmgrOverlay.Services;
 
-public class PersistAndRestoreService : IPersistAndRestoreService
+public class PersistAndRestoreService(IFileService fileService, IOptions<AppConfig> appConfig) : IPersistAndRestoreService
 {
-    private readonly IFileService _fileService;
-    private readonly AppConfig _appConfig;
+    private readonly AppConfig _appConfig = appConfig.Value;
     private readonly string _localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-
-    public PersistAndRestoreService(IFileService fileService, IOptions<AppConfig> appConfig)
-    {
-        _fileService = fileService;
-        _appConfig = appConfig.Value;
-    }
 
     public void PersistData()
     {
-        if (App.Current.Properties != null)
+        if (System.Windows.Application.Current.Properties != null)
         {
             var folderPath = Path.Combine(_localAppData, _appConfig.ConfigurationsFolder);
             var fileName = _appConfig.AppPropertiesFileName;
-            _fileService.Save(folderPath, fileName, App.Current.Properties);
+            fileService.Save(folderPath, fileName, App.Current.Properties);
         }
     }
 
@@ -32,7 +25,7 @@ public class PersistAndRestoreService : IPersistAndRestoreService
     {
         var folderPath = Path.Combine(_localAppData, _appConfig.ConfigurationsFolder);
         var fileName = _appConfig.AppPropertiesFileName;
-        var properties = _fileService.Read<IDictionary>(folderPath, fileName);
+        var properties = fileService.Read<IDictionary>(folderPath, fileName);
         if (properties != null)
         {
             foreach (DictionaryEntry property in properties)

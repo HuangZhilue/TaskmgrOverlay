@@ -1,25 +1,18 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Navigation;
-
 using TaskmgrOverlay.Contracts.Services;
 using TaskmgrOverlay.Contracts.ViewModels;
 
 namespace TaskmgrOverlay.Services;
 
-public class NavigationService : INavigationService
+public class NavigationService(IPageService pageService) : INavigationService
 {
-    private readonly IPageService _pageService;
     private Frame _frame;
     private object _lastParameterUsed;
 
     public event EventHandler<string> Navigated;
 
     public bool CanGoBack => _frame.CanGoBack;
-
-    public NavigationService(IPageService pageService)
-    {
-        _pageService = pageService;
-    }
 
     public void Initialize(Frame shellFrame)
     {
@@ -51,12 +44,12 @@ public class NavigationService : INavigationService
 
     public bool NavigateTo(string pageKey, object parameter = null, bool clearNavigation = false)
     {
-        var pageType = _pageService.GetPageType(pageKey);
+        var pageType = pageService.GetPageType(pageKey);
 
         if (_frame.Content?.GetType() != pageType || (parameter != null && !parameter.Equals(_lastParameterUsed)))
         {
             _frame.Tag = clearNavigation;
-            var page = _pageService.GetPage(pageKey);
+            var page = pageService.GetPage(pageKey);
             var navigated = _frame.Navigate(page, parameter);
             if (navigated)
             {

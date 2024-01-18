@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Hosting;
-
 using TaskmgrOverlay.Contracts.Activation;
 using TaskmgrOverlay.Contracts.Services;
 using TaskmgrOverlay.Contracts.Views;
@@ -7,24 +6,10 @@ using TaskmgrOverlay.ViewModels;
 
 namespace TaskmgrOverlay.Services;
 
-public class ApplicationHostService : IHostedService
+public class ApplicationHostService(IServiceProvider serviceProvider, IEnumerable<IActivationHandler> activationHandlers, INavigationService navigationService, IThemeSelectorService themeSelectorService, IPersistAndRestoreService persistAndRestoreService) : IHostedService
 {
-    private readonly IServiceProvider _serviceProvider;
-    private readonly INavigationService _navigationService;
-    private readonly IPersistAndRestoreService _persistAndRestoreService;
-    private readonly IThemeSelectorService _themeSelectorService;
-    private readonly IEnumerable<IActivationHandler> _activationHandlers;
     private IShellWindow _shellWindow;
     private bool _isInitialized;
-
-    public ApplicationHostService(IServiceProvider serviceProvider, IEnumerable<IActivationHandler> activationHandlers, INavigationService navigationService, IThemeSelectorService themeSelectorService, IPersistAndRestoreService persistAndRestoreService)
-    {
-        _serviceProvider = serviceProvider;
-        _activationHandlers = activationHandlers;
-        _navigationService = navigationService;
-        _themeSelectorService = themeSelectorService;
-        _persistAndRestoreService = persistAndRestoreService;
-    }
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
@@ -40,7 +25,7 @@ public class ApplicationHostService : IHostedService
 
     public async Task StopAsync(CancellationToken cancellationToken)
     {
-        _persistAndRestoreService.PersistData();
+        persistAndRestoreService.PersistData();
         await Task.CompletedTask;
     }
 
@@ -48,8 +33,8 @@ public class ApplicationHostService : IHostedService
     {
         if (!_isInitialized)
         {
-            _persistAndRestoreService.RestoreData();
-            _themeSelectorService.InitializeTheme();
+            persistAndRestoreService.RestoreData();
+            themeSelectorService.InitializeTheme();
             await Task.CompletedTask;
         }
     }
@@ -64,7 +49,7 @@ public class ApplicationHostService : IHostedService
 
     private async Task HandleActivationAsync()
     {
-        var activationHandler = _activationHandlers.FirstOrDefault(h => h.CanHandle());
+        var activationHandler = activationHandlers.FirstOrDefault(h => h.CanHandle());
 
         if (activationHandler != null)
         {
@@ -73,13 +58,13 @@ public class ApplicationHostService : IHostedService
 
         await Task.CompletedTask;
 
-        if (App.Current.Windows.OfType<IShellWindow>().Count() == 0)
+        if (!System.Windows.Application.Current.Windows.OfType<IShellWindow>().Any())
         {
             // Default activation that navigates to the apps default page
-            _shellWindow = _serviceProvider.GetService(typeof(IShellWindow)) as IShellWindow;
-            _navigationService.Initialize(_shellWindow.GetNavigationFrame());
+            _shellWindow = serviceProvider.GetService(typeof(IShellWindow)) as IShellWindow;
+            navigationService.Initialize(_shellWindow.GetNavigationFrame());
             _shellWindow.ShowWindow();
-            _navigationService.NavigateTo(typeof(MainViewModel).FullName);
+            navigationService.NavigateTo(typeof(MainViewModel).FullName);
             await Task.CompletedTask;
         }
     }

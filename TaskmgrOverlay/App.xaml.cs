@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System.IO;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using TaskmgrOverlay.Contracts.Services;
@@ -33,13 +31,14 @@ public partial class App : Application
 
     private async void OnStartup(object sender, StartupEventArgs e)
     {
-        var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+        //var appLocation = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
         // For more information about .NET generic host see  https://docs.microsoft.com/aspnet/core/fundamentals/host/generic-host?view=aspnetcore-3.0
         _host = Host.CreateDefaultBuilder(e.Args)
                 .ConfigureAppConfiguration(c =>
                 {
-                    c.SetBasePath(appLocation);
+                    c.SetBasePath(AppContext.BaseDirectory);
+                    //c.SetBasePath(appLocation);
                 })
                 .ConfigureServices(ConfigureServices)
                 .Build();
