@@ -109,4 +109,7 @@
   <data name="找不到CvChartWindow样式的窗口" xml:space="preserve">
     <value>No window with style "CvChartWindow" found</value>
   </data>
+  <data name="找不到右上角的窗口" xml:space="preserve">
+    <value>Can't find the window in the upper right corner</value>
+  </data>
 </root>

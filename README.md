@@ -30,7 +30,7 @@ Audio visualization, but displayed in task manager
 
 - 系统要求 / System requirements
     - Windows 11
-    - ```Warning``` Windows 10 及以下暂不支持 / Windows 10 and below is not supported
+    - Windows 10
 
 - .Net Core 8.0 
     - 程序已经集成 .Net Core 8.0 运行时 / The program has integrated .Net Core 8.0 runtime
@@ -61,7 +61,6 @@ Audio visualization, but displayed in task manager
 可直接参考 TaskmgrOverlay/ViewModels/MainViewModel.cs
 
 See the examples in TaskmgrOverlay/ViewModels/MainViewModel.cs
-
 
 ``` csharp
 using OverlayLibrary;

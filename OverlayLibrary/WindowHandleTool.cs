@@ -12,8 +12,6 @@ public static class WindowHandleTool
 
     public static IList<Tuple<HWND, RECT>> GetCvChartWindowList()
     {
-        IList<Tuple<HWND, RECT>> CvChartWindowList = [];
-
         // 查找“任务管理器”窗口
         HWND windowHandle = FindWindow(null, "任务管理器");
         if (windowHandle == HWND.NULL)
@@ -55,58 +53,64 @@ public static class WindowHandleTool
 
         // 查找“DirectUIHWND”窗口的子窗口“CtrlNotifySink”
         chidWindowList = windowHandle.EnumChildWindows();
-        // CPU缩略图窗口
-        HWND thumbnailWindow = HWND.NULL;
-        // CPU缩略图窗口的矩形区域
-        RECT thumbnailWindowRect = new();
-        // 不是缩略图窗口的列表
-        IList<HWND> noThumbnailWindowList = [];
+        // 右上角的窗口
+        HWND rightTopWindow = HWND.NULL;
+        // 右上角的窗口的矩形区域
+        RECT rightTopWindowRectTemp = new(int.MaxValue, int.MinValue, 0, 0);
+        RECT rightTopWindowRect = new();
+        double minDistance = double.MaxValue;
+
+        IList<HWND> ctrlNotifySinkList = [];
+        List<Tuple<HWND, RECT>> CvChartWindowList = [];
         foreach (HWND chidWindow in chidWindowList)
         {
             _ = RealGetWindowClass(chidWindow, titleBuilder, maxTitleLength);
             if (string.IsNullOrWhiteSpace(titleBuilder.ToString())) continue;
             if (!titleBuilder.ToString().Trim().Equals("CtrlNotifySink", StringComparison.OrdinalIgnoreCase)) continue;
 
+            // 排除掉“隐藏”的窗口
             int style = GetWindowLong(chidWindow, WindowLongFlags.GWL_STYLE);
             if (((WindowStyles)style & WindowStyles.WS_VISIBLE) != WindowStyles.WS_VISIBLE) continue;
 
-            RECT rect = new();
-            GetWindowRect(chidWindow, out rect);
-            Console.WriteLine(titleBuilder + "\tSTYLE:\t" + (WindowStyles)style + "\tRECT:\t" + rect.Width + "x" + rect.Height);
-            if (thumbnailWindow == HWND.NULL)
+            ctrlNotifySinkList.Add(chidWindow);
+
+            // 查找“CtrlNotifySink”窗口的子窗口“CvChartWindow”
+            IList<HWND> cvChartWindowList = chidWindow.EnumChildWindows();
+            foreach (HWND cvChartWindow in cvChartWindowList)
             {
-                // “DirectUIHWND”窗口内的第一个子窗口“CtrlNotifySink”，默认当作“CPU”缩略图窗口
-                thumbnailWindow = chidWindow;
-                thumbnailWindowRect = rect;
-            }
-
-            // 判断该窗口的矩形区域是否在“CPU”缩略图窗口的矩形区域的右侧（即 不是缩略图那一列）
-            if (rect.Left <= thumbnailWindowRect.Right) continue;
-
-            noThumbnailWindowList.Add(chidWindow);
-        }
-        if (!noThumbnailWindowList.Any()) throw new NullReferenceException(Resources.找不到CtrlNotifySink样式的窗口);
-
-        // 查找“CtrlNotifySink”窗口的子窗口“CvChartWindow”
-        foreach (HWND noThumbnailWindow in noThumbnailWindowList)
-        {
-            chidWindowList = noThumbnailWindow.EnumChildWindows();
-            foreach (HWND chidWindow in chidWindowList)
-            {
-                _ = RealGetWindowClass(chidWindow, titleBuilder, maxTitleLength);
+                _ = RealGetWindowClass(cvChartWindow, titleBuilder, maxTitleLength);
                 if (string.IsNullOrWhiteSpace(titleBuilder.ToString())) continue;
                 Console.WriteLine(titleBuilder);
                 if (titleBuilder.ToString().Trim().Equals("CvChartWindow", StringComparison.OrdinalIgnoreCase))
                 {
-                    RECT rect = new();
-                    GetWindowRect(chidWindow, out rect);
-                    // 之所以用列表来存储，是因为像在CPU窗口中，用“逻辑处理器”来显示不同核心的曲线
-                    CvChartWindowList.Add(Tuple.Create(chidWindow, rect));
-                    break;
+                    GetWindowRect(cvChartWindow, out RECT rect);
+                    // 之所以用列表来存储，是因为像在CPU窗口中，有用“逻辑处理器”来显示不同核心的曲线
+                    CvChartWindowList.Add(Tuple.Create(cvChartWindow, rect));
+
+                    // 计算当前窗口的右上角与rightTopWindowRect的左上角的直线距离
+                    double distance = Math.Sqrt(Math.Pow(rect.Right - rightTopWindowRectTemp.Right, 2) + Math.Pow(rect.Top - rightTopWindowRectTemp.Top, 2));
+
+                    if (distance < minDistance)
+                    {
+                        rightTopWindow = cvChartWindow;
+                        rightTopWindowRect = rect;
+                        minDistance = distance;
+                    }
                 }
             }
         }
-        if (!CvChartWindowList.Any()) throw new NullReferenceException(Resources.找不到CvChartWindow样式的窗口);
+        if (!ctrlNotifySinkList.Any()) throw new NullReferenceException(Resources.找不到CtrlNotifySink样式的窗口);
+        if (rightTopWindow == HWND.NULL || rightTopWindowRect.Width == 0 || rightTopWindowRect.Height == 0) throw new NullReferenceException(Resources.找不到右上角的窗口);
+
+        // 找到右上角的窗口之后，再从CvChartWindowList中查找窗口Top值小于“右上角窗口”的窗口（第一个，如果存在的话，通常是CPU缩略图窗口）
+        RECT cpuThumbnailWindowRect = CvChartWindowList.FirstOrDefault(cvChartWindow => cvChartWindow.Item2.Top <= rightTopWindowRect.Top - 5)?.Item2 ?? new();
+        // 如果存在“CPU”缩略图窗口，则将与该窗口在同一列（Left值差不多）的窗口都一起全部移除掉
+        if (cpuThumbnailWindowRect.Width != 0 && cpuThumbnailWindowRect.Height != 0)
+        {
+            CvChartWindowList = CvChartWindowList.Where(cvChartWindow => !(Math.Abs(cvChartWindow.Item2.Left - cpuThumbnailWindowRect.Left) < 5)).ToList();
+        }
+
+        if (CvChartWindowList.Count == 0) throw new NullReferenceException(Resources.找不到CvChartWindow样式的窗口);
 
         Console.WriteLine("Get CvChartWindow Count:\t" + CvChartWindowList.Count);
         return CvChartWindowList;
@@ -121,7 +125,7 @@ public static class WindowHandleTool
     public static RECT CalcMaxCurveWindowRECT(this IList<Tuple<HWND, RECT>> cvChartWindowList)
     {
         if (cvChartWindowList is null || cvChartWindowList.Count == 0) throw new ArgumentException(null, nameof(cvChartWindowList));
-        var CurveWindowRECTList = cvChartWindowList.Select(c => c.Item2).ToList();
+        List<RECT> CurveWindowRECTList = cvChartWindowList.Select(c => c.Item2).ToList();
         RECT maxCurveWindowRECTTemp = new(CurveWindowRECTList.Min(r => r.Left), CurveWindowRECTList.Min(r => r.Top), CurveWindowRECTList.Max(r => r.Right), CurveWindowRECTList.Max(r => r.Bottom));
         return maxCurveWindowRECTTemp;
     }

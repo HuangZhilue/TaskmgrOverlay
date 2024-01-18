@@ -95,5 +95,14 @@ namespace OverlayLibrary {
                 return ResourceManager.GetString("找不到任务管理器程序", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   查找类似 Can&apos;t find the window in the upper right corner 的本地化字符串。
+        /// </summary>
+        public static string 找不到右上角的窗口 {
+            get {
+                return ResourceManager.GetString("找不到右上角的窗口", resourceCulture);
+            }
+        }
     }
 }

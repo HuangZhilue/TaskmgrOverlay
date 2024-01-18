@@ -129,4 +129,7 @@
   <data name="找不到CvChartWindow样式的窗口" xml:space="preserve">
     <value>找不到"CvChartWindow”样式的窗口</value>
   </data>
+  <data name="找不到右上角的窗口" xml:space="preserve">
+    <value>找不到右上角的窗口</value>
+  </data>
 </root>
