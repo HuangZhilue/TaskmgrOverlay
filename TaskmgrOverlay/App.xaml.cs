@@ -58,6 +58,7 @@ public partial class App : Application
         // Core Services
 
         // Services
+        services.AddSingleton<IAppAutoUpdate, AppAutoUpdate>();
         services.AddSingleton<IFileService, FileService>();
         services.AddSingleton<IApplicationInfoService, ApplicationInfoService>();
         services.AddSingleton<ISystemService, SystemService>();

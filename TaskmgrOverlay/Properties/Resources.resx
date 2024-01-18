@@ -181,4 +181,7 @@
   <data name="绘图宽度已经固定暂时的" xml:space="preserve">
     <value>Drawing width has been fixed (temporarily)</value>
   </data>
+  <data name="新版本可用是否进行更新" xml:space="preserve">
+    <value>A new version is available, do you want to update?</value>
+  </data>
 </root>

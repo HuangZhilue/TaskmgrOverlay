@@ -223,6 +223,15 @@ namespace TaskmgrOverlay.Properties {
         }
         
         /// <summary>
+        ///   查找类似 A new version is available, do you want to update? 的本地化字符串。
+        /// </summary>
+        public static string 新版本可用是否进行更新 {
+            get {
+                return ResourceManager.GetString("新版本可用是否进行更新", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Find 的本地化字符串。
         /// </summary>
         public static string 查找 {

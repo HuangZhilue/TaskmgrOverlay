@@ -6,7 +6,13 @@ using TaskmgrOverlay.ViewModels;
 
 namespace TaskmgrOverlay.Services;
 
-public class ApplicationHostService(IServiceProvider serviceProvider, IEnumerable<IActivationHandler> activationHandlers, INavigationService navigationService, IThemeSelectorService themeSelectorService, IPersistAndRestoreService persistAndRestoreService) : IHostedService
+public class ApplicationHostService(
+    IAppAutoUpdate appAutoUpdate,
+    IServiceProvider serviceProvider,
+    IEnumerable<IActivationHandler> activationHandlers,
+    INavigationService navigationService,
+    IThemeSelectorService themeSelectorService,
+    IPersistAndRestoreService persistAndRestoreService) : IHostedService
 {
     private IShellWindow _shellWindow;
     private bool _isInitialized;
@@ -35,6 +41,7 @@ public class ApplicationHostService(IServiceProvider serviceProvider, IEnumerabl
         {
             persistAndRestoreService.RestoreData();
             themeSelectorService.InitializeTheme();
+            appAutoUpdate.CheckUpdates();
             await Task.CompletedTask;
         }
     }
