@@ -18,15 +18,15 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private BitmapSource _screenshot;
     [ObservableProperty]
-    private System.Windows.Media.Color _backgroundColor = Colors.Black;// new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,0,255));
+    private System.Windows.Media.Color _backgroundColor = System.Windows.Media.Color.FromRgb(25, 25, 25);// new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,0,255));
     [ObservableProperty]
-    private SolidColorBrush _backgroundSolidColorBrush = new(Colors.Black);
+    private SolidColorBrush _backgroundSolidColorBrush = new(System.Windows.Media.Color.FromRgb(25, 25, 25));
     [ObservableProperty]
-    private System.Windows.Media.Color _foregroundColor = Colors.AliceBlue;
+    private System.Windows.Media.Color _foregroundColor = System.Windows.Media.Color.FromRgb(57, 184, 227);
     [ObservableProperty]
-    private SolidColorBrush _foregroundSolidColorBrush = new(Colors.Black);
+    private SolidColorBrush _foregroundSolidColorBrush = new(System.Windows.Media.Color.FromRgb(57, 184, 227));
     [ObservableProperty]
-    private double _alpha = 0.64d;
+    private double _alpha = 0.20d;
     [ObservableProperty]
     private int _drawWaveCurveDelay = 100;
     [ObservableProperty]

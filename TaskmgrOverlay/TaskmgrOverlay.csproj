@@ -6,8 +6,8 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>1.0.121.0245</AssemblyVersion>
-    <FileVersion>1.0.121.0245</FileVersion>
+    <AssemblyVersion>1.0.134.0914</AssemblyVersion>
+    <FileVersion>1.0.134.0914</FileVersion>
 	  <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
 	  <ApplicationIcon>Resources\TaskmgrOverlay.ico</ApplicationIcon>
   </PropertyGroup>
