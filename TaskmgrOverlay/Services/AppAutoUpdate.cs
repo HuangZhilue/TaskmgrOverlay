@@ -24,13 +24,13 @@ public class AppAutoUpdate(IApplicationInfoService applicationInfoService) : IAp
         Update.CheckDownloadNewVersionAsync(GitHubUser, GitHubRepo, version, updateArchive);
     }
 
-    private void Update_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void Update_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (Update.Available)
         {
             MessageBoxResult r = MessageBox.Show(Resources.新版本可用是否进行更新, "", MessageBoxButton.YesNo);
             if (r != MessageBoxResult.Yes) return;
-            var destinationDir = AppContext.BaseDirectory;
+            string destinationDir = AppContext.BaseDirectory;
             Update.StartInstall(destinationDir);
             Environment.Exit(0);//.Close();
         }

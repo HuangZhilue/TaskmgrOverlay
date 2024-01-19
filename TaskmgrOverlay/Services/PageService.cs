@@ -34,7 +34,7 @@ public class PageService : IPageService
 
     public Page GetPage(string key)
     {
-        var pageType = GetPageType(key);
+        Type pageType = GetPageType(key);
         return _serviceProvider.GetService(pageType) as Page;
     }
 
@@ -44,13 +44,13 @@ public class PageService : IPageService
     {
         lock (_pages)
         {
-            var key = typeof(VM).FullName;
+            string key = typeof(VM).FullName;
             if (_pages.ContainsKey(key))
             {
                 throw new ArgumentException($"The key {key} is already configured in PageService");
             }
 
-            var type = typeof(V);
+            Type type = typeof(V);
             if (_pages.Any(p => p.Value == type))
             {
                 throw new ArgumentException($"This type is already configured with key {_pages.First(p => p.Value == type).Key}");

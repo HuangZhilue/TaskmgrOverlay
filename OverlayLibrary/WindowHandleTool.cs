@@ -17,6 +17,8 @@ public static class WindowHandleTool
         if (windowHandle == HWND.NULL)
             windowHandle = FindWindow(lpClassName: "TaskManagerWindow");
 
+        if (windowHandle == HWND.NULL) throw new NullReferenceException(Resources.找不到任务管理器程序);
+
         StringBuilder titleBuilder = new(maxTitleLength);
 
         // 查找“任务管理器”窗口的子窗口“TaskManagerMain”
@@ -87,7 +89,7 @@ public static class WindowHandleTool
                     // 之所以用列表来存储，是因为像在CPU窗口中，有用“逻辑处理器”来显示不同核心的曲线
                     CvChartWindowList.Add(Tuple.Create(cvChartWindow, rect));
 
-                    // 计算当前窗口的右上角与rightTopWindowRect的左上角的直线距离
+                    // 计算当前窗口的右上角与rightTopWindowRect的右上角的直线距离
                     double distance = Math.Sqrt(Math.Pow(rect.Right - rightTopWindowRectTemp.Right, 2) + Math.Pow(rect.Top - rightTopWindowRectTemp.Top, 2));
 
                     if (distance < minDistance)
@@ -152,25 +154,11 @@ public static class WindowHandleTool
         // 获取图像的宽度和高度
         int width = image.Width;
         int height = image.Height;
-        {
-            // 绘制非透明底图像
-            // 将图像绘制到屏幕上
-            BitBlt(screenDC, 0, 0, width, height, memoryDC, 0, 0, RasterOperationMode.SRCCOPY);
-        }
-        //{
-        //    // 绘制透明底图像
-        //    // 创建一个 BlendFunction 结构体，用于指定透明度和混合模式
-        //    BLENDFUNCTION blendFunction = new()
-        //    {
-        //        BlendOp = 0,
-        //        BlendFlags = 0,
-        //        SourceConstantAlpha = 0, // 设置透明度，0 表示完全透明，255 表示完全不透明
-        //        AlphaFormat = 1
-        //    };
 
-        //    // 使用 AlphaBlend 函数绘制带有 alpha 通道的图像
-        //    AlphaBlend(screenDC, 0, 0, width, height, memoryDC, 0, 0, width, height, blendFunction);
-        //}
+        // 绘制非透明底图像
+        // 将图像绘制到屏幕上
+        BitBlt(screenDC, 0, 0, width, height, memoryDC, 0, 0, RasterOperationMode.SRCCOPY);
+
         // 清理资源
         SelectObject(memoryDC, oldBitmap);
         DeleteObject(hBitmap);

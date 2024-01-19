@@ -321,6 +321,92 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="205" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Style="{StaticResource BodyTextStyle}"
+                                Text="{x:Static properties:Resources.最高频率限制}" />
+                            <mah:NumericUpDown
+                                Grid.Column="1"
+                                Style="{StaticResource MahApps.Styles.NumericUpDown.Fluent}"
+                                Value="{Binding MaximumFrequencyLimit}" />
+                        </Grid>
+                    </Border>
+                    <Border
+                        Margin="{StaticResource SmallTopMargin}"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        Background="{DynamicResource MahApps.Brushes.Gray10}"
+                        CornerRadius="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Style="{StaticResource BodyTextStyle}"
+                                Text="{x:Static properties:Resources.应用采样压缩}" />
+                            <mah:ToggleSwitch
+                                Grid.Column="1"
+                                mah:ValidationHelper.ShowValidationErrorOnKeyboardFocus="False"
+                                IsOn="{Binding EnableSampleCompression}"
+                                OffContent=""
+                                OnContent="" />
+                        </Grid>
+                    </Border>
+                    <Border
+                        Margin="{StaticResource SmallTopMargin}"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        Background="{DynamicResource MahApps.Brushes.Gray10}"
+                        CornerRadius="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Style="{StaticResource BodyTextStyle}"
+                                Text="{x:Static properties:Resources.应用高斯过滤}" />
+                            <mah:ToggleSwitch
+                                Grid.Column="1"
+                                mah:ValidationHelper.ShowValidationErrorOnKeyboardFocus="False"
+                                IsOn="{Binding EnableGaussianFilter}"
+                                OffContent=""
+                                OnContent="" />
+                        </Grid>
+                    </Border>
+                    <Border
+                        Margin="{StaticResource SmallTopMargin}"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        Background="{DynamicResource MahApps.Brushes.Gray10}"
+                        CornerRadius="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Style="{StaticResource BodyTextStyle}"
+                                Text="{x:Static properties:Resources.应用A权重}" />
+                            <mah:ToggleSwitch
+                                Grid.Column="1"
+                                mah:ValidationHelper.ShowValidationErrorOnKeyboardFocus="False"
+                                IsOn="{Binding EnableAWeighted}"
+                                OffContent=""
+                                OnContent="" />
+                        </Grid>
+                    </Border>
+                    <Border
+                        Margin="{StaticResource SmallTopMargin}"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        Background="{DynamicResource MahApps.Brushes.Gray10}"
+                        CornerRadius="5">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="100" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>

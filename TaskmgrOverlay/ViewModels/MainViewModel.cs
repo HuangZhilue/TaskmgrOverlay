@@ -15,22 +15,63 @@ namespace TaskmgrOverlay.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
+    /// <summary>
+    /// 任务管理器的截图
+    /// </summary>
     [ObservableProperty]
     private BitmapSource _screenshot;
+    /// <summary>
+    /// 背景颜色
+    /// </summary>
     [ObservableProperty]
     private System.Windows.Media.Color _backgroundColor = System.Windows.Media.Color.FromRgb(25, 25, 25);// new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,0,255));
     [ObservableProperty]
     private SolidColorBrush _backgroundSolidColorBrush = new(System.Windows.Media.Color.FromRgb(25, 25, 25));
+    /// <summary>
+    /// 前景颜色
+    /// </summary>
     [ObservableProperty]
     private System.Windows.Media.Color _foregroundColor = System.Windows.Media.Color.FromRgb(57, 184, 227);
     [ObservableProperty]
     private SolidColorBrush _foregroundSolidColorBrush = new(System.Windows.Media.Color.FromRgb(57, 184, 227));
+    /// <summary>
+    /// 透明度
+    /// </summary>
     [ObservableProperty]
     private double _alpha = 0.20d;
+    /// <summary>
+    /// 绘图延迟
+    /// </summary>
     [ObservableProperty]
     private int _drawWaveCurveDelay = 100;
+    /// <summary>
+    /// 绘图高度缩放比例
+    /// </summary>
     [ObservableProperty]
     private double _heightScaling = 4;
+    /// <summary>
+    /// 最高频率限制
+    /// </summary>
+    [ObservableProperty]
+    private int _maximumFrequencyLimit = 2500;
+    /// <summary>
+    /// 是否应用采样压缩
+    /// </summary>
+    [ObservableProperty]
+    private bool _enableSampleCompression = false;
+    /// <summary>
+    /// 是否应用高斯过滤
+    /// </summary>
+    [ObservableProperty]
+    private bool _enableGaussianFilter = true;
+    /// <summary>
+    /// 是否应用A权重
+    /// </summary>
+    [ObservableProperty]
+    private bool _enableAWeighted = true;
+    /// <summary>
+    /// 正在录制
+    /// </summary>
     [ObservableProperty]
     private bool _isRecording = false;
 
@@ -117,7 +158,7 @@ public partial class MainViewModel : ObservableObject
                         {
                             if (MaxCurveWindowRECT == Vanara.PInvoke.RECT.Empty || CvChartWindowList.Count == 0) continue;
 
-                            Bitmap waveCurveBitmap = AudioCaptureAndVisualization.GetWaveCurve(MaxCurveWindowRECT.Width, (int)(MaxCurveWindowRECT.Height / HeightScaling), WaveCurvePen, WaveCurveBackgroundColor, (int)(Alpha * 255));
+                            Bitmap waveCurveBitmap = AudioCaptureAndVisualization.GetWaveCurve(MaxCurveWindowRECT.Width, (int)(MaxCurveWindowRECT.Height / HeightScaling), WaveCurvePen, WaveCurveBackgroundColor, (int)(Alpha * 255), MaximumFrequencyLimit, EnableSampleCompression, EnableGaussianFilter, EnableAWeighted);
                             if (waveCurveBitmap == null) continue;
                             //Cv2.ImShow("WaveCurve", waveCurveBitmap.ToMat());
                             // 按照最大矩形区域的大小（以及相关参数）来调整图片大小

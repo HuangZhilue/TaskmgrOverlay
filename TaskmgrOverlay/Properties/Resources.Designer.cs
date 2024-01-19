@@ -214,6 +214,33 @@ namespace TaskmgrOverlay.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Apply A weight 的本地化字符串。
+        /// </summary>
+        public static string 应用A权重 {
+            get {
+                return ResourceManager.GetString("应用A权重", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Apply sample compression 的本地化字符串。
+        /// </summary>
+        public static string 应用采样压缩 {
+            get {
+                return ResourceManager.GetString("应用采样压缩", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Apply Gaussian filter 的本地化字符串。
+        /// </summary>
+        public static string 应用高斯过滤 {
+            get {
+                return ResourceManager.GetString("应用高斯过滤", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Start 的本地化字符串。
         /// </summary>
         public static string 开始 {
@@ -228,6 +255,15 @@ namespace TaskmgrOverlay.Properties {
         public static string 新版本可用是否进行更新 {
             get {
                 return ResourceManager.GetString("新版本可用是否进行更新", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Maximum frequency limit 的本地化字符串。
+        /// </summary>
+        public static string 最高频率限制 {
+            get {
+                return ResourceManager.GetString("最高频率限制", resourceCulture);
             }
         }
         

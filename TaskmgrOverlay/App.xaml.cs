@@ -71,11 +71,11 @@ public partial class App : Application
         services.AddTransient<IShellWindow, ShellWindow>();
         services.AddTransient<ShellViewModel>();
 
-        services.AddTransient<MainViewModel>();
-        services.AddTransient<MainPage>();
+        services.AddSingleton<MainViewModel>();
+        services.AddSingleton<MainPage>();
 
-        services.AddTransient<SettingsViewModel>();
-        services.AddTransient<SettingsPage>();
+        services.AddSingleton<SettingsViewModel>();
+        services.AddSingleton<SettingsPage>();
 
         // Configuration
         services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));

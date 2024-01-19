@@ -23,7 +23,7 @@ public class ThemeSelectorService : IThemeSelectorService
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(HcDarkTheme), MahAppsLibraryThemeProvider.DefaultInstance));
         ThemeManager.Current.AddLibraryTheme(new LibraryTheme(new Uri(HcLightTheme), MahAppsLibraryThemeProvider.DefaultInstance));
 
-        var theme = GetCurrentTheme();
+        AppTheme theme = GetCurrentTheme();
         SetTheme(theme);
     }
 
@@ -46,13 +46,10 @@ public class ThemeSelectorService : IThemeSelectorService
 
     public AppTheme GetCurrentTheme()
     {
-        if (Application.Current.Properties.Contains("Theme"))
-        {
-            var themeName = Application.Current.Properties["Theme"].ToString();
-            _ = Enum.TryParse(themeName, out AppTheme theme);
-            return theme;
-        }
+        if (!Application.Current.Properties.Contains("Theme")) return AppTheme.Default;
 
-        return AppTheme.Default;
+        string themeName = Application.Current.Properties["Theme"].ToString();
+        _ = Enum.TryParse(themeName, out AppTheme theme);
+        return theme;
     }
 }

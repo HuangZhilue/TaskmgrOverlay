@@ -54,15 +54,14 @@ public partial class ShellViewModel(INavigationService navigationService) : Obse
 
     private void NavigateTo(Type targetViewModel)
     {
-        if (targetViewModel != null)
-        {
-            navigationService.NavigateTo(targetViewModel.FullName);
-        }
+        if (targetViewModel == null) return;
+
+        navigationService.NavigateTo(targetViewModel.FullName);
     }
 
     private void OnNavigated(object sender, string viewModelName)
     {
-        var item = MenuItems
+        HamburgerMenuItem item = MenuItems
                     .OfType<HamburgerMenuItem>()
                     .FirstOrDefault(i => viewModelName == i.TargetPageType?.FullName);
         if (item != null)

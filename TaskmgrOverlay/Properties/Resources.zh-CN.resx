@@ -204,4 +204,16 @@
   <data name="新版本可用是否进行更新" xml:space="preserve">
     <value>新版本可用，是否进行更新？</value>
   </data>
+  <data name="应用A权重" xml:space="preserve">
+    <value>应用A权重</value>
+  </data>
+  <data name="应用采样压缩" xml:space="preserve">
+    <value>应用采样压缩</value>
+  </data>
+  <data name="应用高斯过滤" xml:space="preserve">
+    <value>应用高斯过滤</value>
+  </data>
+  <data name="最高频率限制" xml:space="preserve">
+    <value>最高频率限制</value>
+  </data>
 </root>

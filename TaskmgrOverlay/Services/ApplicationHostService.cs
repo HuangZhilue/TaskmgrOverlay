@@ -56,7 +56,7 @@ public class ApplicationHostService(
 
     private async Task HandleActivationAsync()
     {
-        var activationHandler = activationHandlers.FirstOrDefault(h => h.CanHandle());
+        IActivationHandler activationHandler = activationHandlers.FirstOrDefault(h => h.CanHandle());
 
         if (activationHandler != null)
         {
