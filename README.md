@@ -63,31 +63,43 @@ Audio visualization, but displayed in task manager
 See the examples in TaskmgrOverlay/ViewModels/MainViewModel.cs
 
 ``` csharp
+// 引用核心库 / using the core library
 using OverlayLibrary;
 
+// 获取“任务管理器”的窗口句柄 / Get the window handle of the Taskmgr
 var CvChartWindowList = WindowHandleTool.GetCvChartWindowList();
+// 计算出最大窗口矩形大小 / Calculate the maximum window rectangle
 var MaxCurveWindowRECT = CvChartWindowList.CalcMaxCurveWindowRECT();
 
+// 绘制音频可视化图片的画笔和背景颜色 / Draw the audio visualization image pen and background color
 var WaveCurvePen = new System.Drawing.Pen(System.Drawing.Color.FromArgb(255, 57, 184, 227), 2.0f);
 var WaveCurveBackgroundColor = System.Drawing.Color.FromArgb(255, 25, 25, 25);
 
+// 开始监听系统音频输出 / Start capturing system audio output
 AudioCaptureAndVisualization.StartAudioCapture();
 Task.Run(async () =>
 {
+    // 异步循环绘制音频可视化图片 / Asynchronous loop to draw audio visualization image
     while (AudioCaptureAndVisualization.IsRecording)
     {
+        // 延迟绘制 / Delay drawing
         await Task.Delay(100).ConfigureAwait(false);
 
         if (MaxCurveWindowRECT == Vanara.PInvoke.RECT.Empty || CvChartWindowList.Count == 0) continue;
 
-        System.Drawing.Bitmap waveCurveBitmap = AudioCaptureAndVisualization.GetWaveCurve(MaxCurveWindowRECT.Width, MaxCurveWindowRECT.Height, WaveCurvePen, WaveCurveBackgroundColor, (int)(0.64 * 255));
+        // 获取音频可视化图片 / Get the audio visualization image
+        System.Drawing.Bitmap waveCurveBitmap = AudioCaptureAndVisualization.GetWaveCurve(MaxCurveWindowRECT.Width, MaxCurveWindowRECT.Height, 4, WaveCurvePen, WaveCurveBackgroundColor, (int)(0.64 * 255));
         if (waveCurveBitmap == null) continue;
+        // 调整图片到合适“最大窗口矩形”的大小 / Adjust the image to the proper size of the maximum window rectangle
         System.Drawing.Bitmap adjustedImage = ImageHelper.AdjustImage(waveCurveBitmap, MaxCurveWindowRECT, DisplayMode.Fill, Alignment.Center);
+        // 向“任务管理器”的窗口句柄上绘制图片 / Draw the image on the corresponding window handle
         for (int i = 0; i < CvChartWindowList.Count; i++)
         {
             Vanara.PInvoke.HWND windowHandle = CvChartWindowList[i].Item1;
             Vanara.PInvoke.RECT rectangle = CvChartWindowList[i].Item2;
+            // 像是“CPU利用率”的“逻辑处理器”显示方式下，有多个窗口，就要根据窗口的位置进行截取 / If there are multiple windows, it needs to be cropped according to the position of the window
             System.Drawing.Bitmap cropImage = ImageHelper.CropImage(adjustedImage, rectangle, MaxCurveWindowRECT.X, MaxCurveWindowRECT.Y);
+            // 在对应的窗口句柄上显示图片 / Show the image on the corresponding window handle
             WindowHandleTool.ShowImage(windowHandle, cropImage);
         }
     }
