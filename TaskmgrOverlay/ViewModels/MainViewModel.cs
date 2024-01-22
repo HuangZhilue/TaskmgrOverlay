@@ -158,7 +158,7 @@ public partial class MainViewModel : ObservableObject
                         {
                             if (MaxCurveWindowRECT == Vanara.PInvoke.RECT.Empty || CvChartWindowList.Count == 0) continue;
 
-                            Bitmap waveCurveBitmap = AudioCaptureAndVisualization.GetWaveCurve(MaxCurveWindowRECT.Width, (int)(MaxCurveWindowRECT.Height / HeightScaling), WaveCurvePen, WaveCurveBackgroundColor, (int)(Alpha * 255), MaximumFrequencyLimit, EnableSampleCompression, EnableGaussianFilter, EnableAWeighted);
+                            Bitmap waveCurveBitmap = AudioCaptureAndVisualization.GetWaveCurve(MaxCurveWindowRECT.Width, MaxCurveWindowRECT.Height, HeightScaling, WaveCurvePen, WaveCurveBackgroundColor, (int)(Alpha * 255), MaximumFrequencyLimit, EnableSampleCompression, EnableGaussianFilter, EnableAWeighted);
                             if (waveCurveBitmap == null) continue;
                             //Cv2.ImShow("WaveCurve", waveCurveBitmap.ToMat());
                             // 按照最大矩形区域的大小（以及相关参数）来调整图片大小

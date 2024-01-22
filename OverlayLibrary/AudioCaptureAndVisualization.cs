@@ -36,9 +36,9 @@ public class AudioCaptureAndVisualization
         }
     }
 
-    public static Bitmap GetWaveCurve(int width, int height, Pen drawCurvePen, Color backgroundColor, int fillClosedCurveAlpha = 64, int maximumFrequencyLimit = 2500, bool enableSampleCompression = false, bool enableGaussianFilter = false, bool enableAWeighted = false)
+    public static Bitmap GetWaveCurve(int width, int height, double heightScaling, Pen drawCurvePen, Color backgroundColor, int fillClosedCurveAlpha = 64, int maximumFrequencyLimit = 2500, bool enableSampleCompression = false, bool enableGaussianFilter = false, bool enableAWeighted = false)
     {
-        return DrawWaveCurve(AllSamples, width, height, drawCurvePen, backgroundColor, fillClosedCurveAlpha, maximumFrequencyLimit, enableSampleCompression, enableGaussianFilter, enableAWeighted);
+        return DrawWaveCurve(AllSamples, width, height, heightScaling, drawCurvePen, backgroundColor, fillClosedCurveAlpha, maximumFrequencyLimit, enableSampleCompression, enableGaussianFilter, enableAWeighted);
     }
 
     private static void LoopbackCapture_DataAvailable(object? sender, WaveInEventArgs e)
@@ -53,7 +53,7 @@ public class AudioCaptureAndVisualization
         }
     }
 
-    private static Bitmap DrawWaveCurve(float[] allSamples, int width, int height, Pen drawCurvePen, Color backgroundColor, int fillClosedCurveAlpha = 64, int maximumFrequencyLimit = 2500, bool enableSampleCompression = false, bool enableGaussianFilter = false, bool enableAWeighted = false)
+    private static Bitmap DrawWaveCurve(float[] allSamples, int width, int height, double heightScaling, Pen drawCurvePen, Color backgroundColor, int fillClosedCurveAlpha = 64, int maximumFrequencyLimit = 2500, bool enableSampleCompression = false, bool enableGaussianFilter = false, bool enableAWeighted = false)
     {
         if (allSamples.Length == 0) return null!;
         // 获取音频数据的通道数
@@ -156,7 +156,7 @@ public class AudioCaptureAndVisualization
             tempFinalData.Add(0);
             // height 为窗口高度
             PointF[] points2 = tempFinalData
-                .Select((v, i) => new PointF(i * width / (float)(tempFinalData.Count - 1), (float)(height - v)))
+                .Select((v, i) => new PointF(i * width / (float)(tempFinalData.Count - 1), (float)(height - v * heightScaling)))
                 .ToArray();
             graphics.DrawCurve(drawCurvePen ?? new(Color.Purple, 5), points2);    // Graphics 可以直接绘制曲线
 
