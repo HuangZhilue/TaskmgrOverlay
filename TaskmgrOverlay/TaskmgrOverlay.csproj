@@ -6,8 +6,8 @@
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyVersion>1.0.180.0955</AssemblyVersion>
-    <FileVersion>1.0.180.0955</FileVersion>
+    <AssemblyVersion>1.0.237.0806</AssemblyVersion>
+    <FileVersion>1.0.237.0806</FileVersion>
 	  <InterceptorsPreviewNamespaces>$(InterceptorsPreviewNamespaces);Microsoft.Extensions.Configuration.Binder.SourceGeneration</InterceptorsPreviewNamespaces>
 	  <ApplicationIcon>Resources\TaskmgrOverlay.ico</ApplicationIcon>
   </PropertyGroup>
@@ -31,7 +31,7 @@
   <ItemGroup>
     <PackageReference Include="AutoUpdateViaGitHubRelease" Version="0.1.64" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0476" />
+    <PackageReference Include="MahApps.Metro" Version="3.0.0-alpha0492" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
 	<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

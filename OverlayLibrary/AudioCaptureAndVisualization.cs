@@ -146,7 +146,7 @@ public class AudioCaptureAndVisualization
         // 绘制时域图象
 
         // 设置波形图的参数
-        Bitmap bitmap = new(width, height);
+        Bitmap bitmap = new(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             graphics.Clear(backgroundColor);

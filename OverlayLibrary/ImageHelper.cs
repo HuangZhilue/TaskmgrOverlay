@@ -121,7 +121,7 @@ public static class ImageHelper
         }
 
         // 创建一个新的位图，并绘制调整后的图片内容
-        Bitmap adjustedImage = new(width, height);
+        Bitmap adjustedImage = new(width, height, image.PixelFormat);
         using (Graphics graphics = Graphics.FromImage(adjustedImage))
         {
             graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
@@ -167,7 +167,7 @@ public static class ImageHelper
     /// <returns></returns>
     public static Bitmap CropImage(Bitmap mainImage, RECT rectangle, int start_x = 0, int start_y = 0)
     {
-        Bitmap croppedImage = new(rectangle.Width, rectangle.Height);
+        Bitmap croppedImage = new(rectangle.Width, rectangle.Height, mainImage.PixelFormat);
 
         using (Graphics graphics = Graphics.FromImage(croppedImage))
         {

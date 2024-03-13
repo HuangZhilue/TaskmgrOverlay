@@ -109,7 +109,12 @@ public static class WindowHandleTool
         // 如果存在“CPU”缩略图窗口，则将与该窗口在同一列（Left值差不多）的窗口都一起全部移除掉
         if (cpuThumbnailWindowRect.Width != 0 && cpuThumbnailWindowRect.Height != 0)
         {
-            CvChartWindowList = CvChartWindowList.Where(cvChartWindow => !(Math.Abs(cvChartWindow.Item2.Left - cpuThumbnailWindowRect.Left) < 5)).ToList();
+            // 如果全部窗口都是类似于“CPU缩略图”那样的窗口，那么就不需要再移除了
+            if (!CvChartWindowList.All(cvChartWindow => Math.Abs(cvChartWindow.Item2.Left - cpuThumbnailWindowRect.Left) < 5))
+            {
+                // 移除类似于“CPU缩略图”的窗口
+                CvChartWindowList = CvChartWindowList.Where(cvChartWindow => !(Math.Abs(cvChartWindow.Item2.Left - cpuThumbnailWindowRect.Left) < 5)).ToList();
+            }
         }
 
         if (CvChartWindowList.Count == 0) throw new NullReferenceException(Resources.找不到CvChartWindow样式的窗口);
@@ -132,6 +137,8 @@ public static class WindowHandleTool
         return maxCurveWindowRECTTemp;
     }
 
+    //private static List<long> TicksList = [];
+
     /// <summary>
     /// 将图片绘制在对应的窗口句柄所在的矩形区域中
     /// </summary>
@@ -141,6 +148,10 @@ public static class WindowHandleTool
     public static void ShowImage(this HWND hwnd, Bitmap image)
     {
         if (hwnd.IsNull || image is null) return;
+
+        //Stopwatch stopwatch = new();
+        //stopwatch.Start();
+
         // 获取屏幕的设备上下文
         SafeHDC screenDC = GetDC(hwnd);
 
@@ -157,12 +168,86 @@ public static class WindowHandleTool
 
         // 绘制非透明底图像
         // 将图像绘制到屏幕上
-        BitBlt(screenDC, 0, 0, width, height, memoryDC, 0, 0, RasterOperationMode.SRCCOPY);
+        BitBlt(screenDC,
+               0,
+               0,
+               width,
+               height,
+               memoryDC,
+               0,
+               0,
+               RasterOperationMode.SRCCOPY);
 
         // 清理资源
         SelectObject(memoryDC, oldBitmap);
         DeleteObject(hBitmap);
         DeleteDC(memoryDC);
         ReleaseDC(IntPtr.Zero, screenDC);
+
+        //stopwatch.Stop();
+        //TicksList.Add(stopwatch.ElapsedTicks);
+        //Debug.WriteLine("运行Ticks: " + stopwatch.ElapsedTicks + "平均Ticks: " + TicksList.Average());
+        // 平均Ticks: 3080
     }
+
+    //public static void ShowImage2(this HWND hwnd, Bitmap image)
+    //{
+    //    if (hwnd.IsNull || image is null) return;
+
+    //    //Stopwatch stopwatch = new();
+    //    //stopwatch.Start();
+
+    //    using Graphics graphics = Graphics.FromHwnd(hwnd.DangerousGetHandle());
+    //    // 清理绘图区域
+    //    //graphics.Clear(Color.Transparent);
+
+    //    // 绘制带有 alpha 通道的图片
+    //    graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height));
+
+    //    //stopwatch.Stop();
+    //    //TicksList.Add(stopwatch.ElapsedTicks);
+    //    //Debug.WriteLine("运行Ticks: " + stopwatch.ElapsedTicks + "平均Ticks: " + TicksList.Average());
+    //    // 平均Ticks: 9740
+    //}
+
+    //public static void ShowTransparentImage2(this HWND hwnd, Bitmap image)
+    //{
+    //    if (hwnd.IsNull || image is null) return;
+
+    //    // 获取屏幕的设备上下文
+    //    SafeHDC screenDC = GetDC(hwnd);
+
+    //    // 创建一个内存设备上下文
+    //    SafeHDC memoryDC = CreateCompatibleDC(screenDC);
+
+    //    // 将图像数据拷贝到内存设备上下文中
+    //    nint hBitmap = image.GetHbitmap();
+    //    HGDIOBJ oldBitmap = SelectObject(memoryDC, hBitmap);
+
+    //    // 获取图像的宽度和高度
+    //    int width = image.Width;
+    //    int height = image.Height;
+
+    //    // 设置透明度
+    //    BLENDFUNCTION blend = new(0xff);
+
+    //    // 绘制透明底图像
+    //    AlphaBlend(screenDC,
+    //               0,
+    //               0,
+    //               width,
+    //               height,
+    //               memoryDC,
+    //               0,
+    //               0,
+    //               width,
+    //               height,
+    //               blend);
+
+    //    // 清理资源
+    //    SelectObject(memoryDC, oldBitmap);
+    //    DeleteObject(hBitmap);
+    //    DeleteDC(memoryDC);
+    //    ReleaseDC(IntPtr.Zero, screenDC);
+    //}
 }

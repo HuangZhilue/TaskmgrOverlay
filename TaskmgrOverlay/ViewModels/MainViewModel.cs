@@ -24,7 +24,7 @@ public partial class MainViewModel : ObservableObject
     /// 背景颜色
     /// </summary>
     [ObservableProperty]
-    private System.Windows.Media.Color _backgroundColor = System.Windows.Media.Color.FromRgb(25, 25, 25);// new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,0,255));
+    private System.Windows.Media.Color _backgroundColor = System.Windows.Media.Color.FromArgb(255, 25, 25, 25);// new SolidColorBrush(System.Windows.Media.Color.FromRgb(255,0,255));
     [ObservableProperty]
     private SolidColorBrush _backgroundSolidColorBrush = new(System.Windows.Media.Color.FromRgb(25, 25, 25));
     /// <summary>
